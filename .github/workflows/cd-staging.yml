@@ -24,7 +24,21 @@ jobs:
             cd ~
             cd app-deploy
             git pull origin main
+            cd bash
+            bash scripts.sh
             pnpm install
+            cd packages/prisma
+            npx prisma migrate dev
+            cd ../..
+            sudo cp nginx-conf/nginx-dev.conf /etc/nginx/nginx.conf
+            sudo systemctl restart nginx
             pnpm run build
+            cd apps/http-backend
+            pm2 restart "http-be" || pm2 start npm --name "http-be" -- start
+            cd ../ws-backend
+            pm2 restart "ws-be" || pm2 start npm --name "ws-be" -- start
+            cd ../web
+            pm2 restart "fe" || pm2 start npm --name "fe" -- start
             pm2 restart all
+            pm2 save
           EOF
