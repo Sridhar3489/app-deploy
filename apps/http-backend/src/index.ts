@@ -26,3 +26,9 @@ app.post("/signup", async(req, res)=>{
         id: user.id
     })
 })
+
+app.get("/cd", async(req, res)=>{
+    res.status(200).json({
+        message: "CD Endpoint"
+    })
+})
