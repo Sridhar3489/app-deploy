@@ -36,7 +36,7 @@ jobs:
             npx prisma migrate dev
             cd ../..
             sudo cp nginx-conf/nginx-dev.conf /etc/nginx/nginx.conf
-            sudo systemctl restart nginx
+            sudo systemctl reload nginx
             pnpm run build
             cd apps/http-backend
             pm2 restart "http-be" || pm2 start npm --name "http-be" -- start
