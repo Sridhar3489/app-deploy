@@ -59,3 +59,11 @@ exports : {
 
 ### Frontend
 - Fetch the first user details from db and show it in the webpage
+
+
+### Deployment
+- dev and prod environments
+- Create a new key pair using ssh-keygen
+- Create 2 servers called dev and prod
+- SSH into machine - `ssh -i ~/.ssh/do_temp username@IP`
+- Copying bash script from local to remote machine - `scp -i ~/.ssh/do_temp sourceDirectory/file username@publicIPv4:pathToSaveTheFile`
