@@ -1,6 +1,6 @@
 name: Deploy to staging
 on:
-  pull_request:
+  push:
     branches:
       - main
 
@@ -24,4 +24,7 @@ jobs:
             cd ~
             cd app-deploy
             git pull origin main
+            pnpm install
+            pnpm run build
+            pm2 restart all
           EOF
