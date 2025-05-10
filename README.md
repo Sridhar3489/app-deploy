@@ -60,7 +60,6 @@ exports : {
 ### Frontend
 - Fetch the first user details from db and show it in the webpage
 
-
 ### Deployment
 - dev and prod environments
 - Create a new key pair using ssh-keygen
@@ -72,7 +71,22 @@ exports : {
 - `pm2` or `forever`
 - `pm2 start npm --name "http-server" -- start`
 - `pm2 stop http-server`
+- `pm2 restart http-server`
 - `pm2 list` - list of all process running by pm2
 - `pm2 logs ${id}` - to check logs
 - Create nginx.conf files in both dev and prod environments and reload nginx using - `sudo systemctl reload nginx`
 - Deleting stopped or errored pm2 processes - `pm2 ls | awk '/stopped|errored/ {print $2}' | xargs -r pm2 delete`
+- Steps to run application in dev / prod server
+    - build - `pnpm run build`
+    - run - `pm2 start npm --name "process name" -- start`
+##### CI/CD
+- Create a .github/workflows folder in root directory
+- Create cd-staging.yml and cd-prod.yml files
+- Pipeline
+    - Name
+    - Trigger
+    - Jobs
+        - SSH
+        - Pull
+        - Build
+        - Start
