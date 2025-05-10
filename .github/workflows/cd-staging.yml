@@ -15,13 +15,12 @@ jobs:
 
       - name: SSH into server
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
-          chmod 600 ~/ssh_key
           mkdir -p /home/runner/.ssh
-          cd /home/runner/.ssh && touch known_hosts
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" &> /home/runner/.ssh/id_rsa
+          chmod 600 /home/runner/.ssh/id_rsa
           ssh-keyscan -H {{ secrets.STAGING_IP }} >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-          ssh -i ~/ssh_key ${{ secrets.VM_USERNAME }}@${{ secrets.STAGING_IP }} <<'EOF'
+          ssh -i /home/runner/.ssh/id_rsa ${{ secrets.VM_USERNAME }}@${{ secrets.STAGING_IP }} <<'EOF'
             cd ~
             cd app-deploy
             git pull origin main
