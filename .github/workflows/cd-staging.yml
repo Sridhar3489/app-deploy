@@ -16,6 +16,7 @@ jobs:
       - name: SSH into server
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GIT_REPO_URL: ${{ secrets.GIT_REPO_URL }}
         run: |
           mkdir -p /home/runner/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" &> /home/runner/.ssh/id_rsa
@@ -24,7 +25,7 @@ jobs:
           chmod 644 ~/.ssh/known_hosts
           ssh -i /home/runner/.ssh/id_rsa ${{ secrets.VM_USERNAME }}@${{ secrets.STAGING_IP }} <<EOF
             cd ~
-            [ ! -d app-deploy ] && git clone https://github.com/Sridhar3489/app-deploy.git || (cd app-deploy && git pull origin main)
+            [ ! -d app-deploy ] && git clone ${GIT_REPO_URL} || (cd app-deploy && git pull origin main)
             cd app-deploy
             cd bash
             bash scripts.sh
