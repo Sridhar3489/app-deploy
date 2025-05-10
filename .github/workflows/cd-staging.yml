@@ -28,6 +28,7 @@ jobs:
             cd app-deploy
             cd bash
             bash scripts.sh
+            cd ..
             pnpm install
             cd packages/prisma
             touch .env
