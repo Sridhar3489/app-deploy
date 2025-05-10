@@ -11,3 +11,9 @@ sudo apt-get install -y nodejs build-essential
 sudo apt-get install -y nginx
 sudo systemctl enable nginx
 sudo systemctl start nginx
+
+# Installing pnpm
+npm install -g pnpm
+
+# Installing pm2
+npm install -g pm2
