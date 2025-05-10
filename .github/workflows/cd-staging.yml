@@ -19,6 +19,6 @@ jobs:
           chmod 600 ~/ssh_key
           ssh -o StrictHostKeyChecking=no -i ~/ssh_key ${{ secrets.VM_USERNAME }}@${{ secrets.STAGING_IP }} <<'EOF'
             cd ~
-            cd app_deploy
+            cd app-deploy
             git pull origin main
           EOF
