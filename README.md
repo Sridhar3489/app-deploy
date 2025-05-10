@@ -67,3 +67,12 @@ exports : {
 - Create 2 servers called dev and prod
 - SSH into machine - `ssh -i ~/.ssh/do_temp username@IP`
 - Copying bash script from local to remote machine - `scp -i ~/.ssh/do_temp sourceDirectory/file username@publicIPv4:pathToSaveTheFile`
+- `npm run build`
+- `npm run start`
+- `pm2` or `forever`
+- `pm2 start npm --name "http-server" -- start`
+- `pm2 stop http-server`
+- `pm2 list` - list of all process running by pm2
+- `pm2 logs ${id}` - to check logs
+- Create nginx.conf files in both dev and prod environments and reload nginx using - `sudo systemctl reload nginx`
+- Deleting stopped or errored pm2 processes - `pm2 ls | awk '/stopped|errored/ {print $2}' | xargs -r pm2 delete`
