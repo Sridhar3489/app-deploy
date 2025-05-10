@@ -32,3 +32,9 @@ app.get("/cd", async(req, res)=>{
         message: "CD Endpoint"
     })
 })
+
+app.get("/new", async(req, res)=>{
+    res.status(200).json({
+        message: "Running from new server"
+    })
+})
