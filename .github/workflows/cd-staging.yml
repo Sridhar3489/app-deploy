@@ -17,6 +17,7 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
           chmod 600 ~/ssh_key
+          ssh-keyscan -H {{ secrets.STAGING_IP }} >> ~/.ssh/known_hosts
           ssh -i ~/ssh_key ${{ secrets.VM_USERNAME }}@${{ secrets.STAGING_IP }} <<'EOF'
             cd ~
             cd app-deploy
