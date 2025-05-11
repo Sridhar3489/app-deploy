@@ -13,7 +13,7 @@ sudo systemctl enable nginx
 sudo systemctl start nginx
 
 # Installing pnpm
-npm install -g pnpm
+sudo npm install -g pnpm
 
 # Installing pm2
-npm install -g pm2
+sudo npm install -g pm2
