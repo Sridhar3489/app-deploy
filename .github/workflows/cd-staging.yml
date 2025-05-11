@@ -1,0 +1,50 @@
+name: Deploy to staging
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploying application to the staging cluster
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: SSH into server
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GIT_REPO_URL: ${{ secrets.GIT_REPO_URL }}
+        run: |
+          mkdir -p /home/runner/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" &> /home/runner/.ssh/id_rsa
+          chmod 600 /home/runner/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.STAGING_IP }} >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          ssh -i /home/runner/.ssh/id_rsa ${{ secrets.VM_USERNAME }}@${{ secrets.STAGING_IP }} <<EOF
+            cd ~
+            [ ! -d app-deploy ] && git clone ${GIT_REPO_URL} || (cd app-deploy && git pull origin main)
+            cd app-deploy
+            cd bash
+            bash scripts.sh
+            cd ..
+            pnpm install
+            cd packages/prisma
+            touch .env
+            echo "DATABASE_URL=${DATABASE_URL}" >> .env
+            npx prisma migrate dev
+            cd ../..
+            sudo cp nginx-conf/nginx-dev.conf /etc/nginx/nginx.conf
+            sudo systemctl reload nginx
+            pnpm run build
+            cd apps/http-backend
+            pm2 restart "http-be" || pm2 start npm --name "http-be" -- start
+            cd ../ws-backend
+            pm2 restart "ws-be" || pm2 start npm --name "ws-be" -- start
+            cd ../web
+            pm2 restart "fe" || pm2 start npm --name "fe" -- start
+            pm2 restart all
+            pm2 save
+          EOF
